@@ -10,6 +10,9 @@
       --purple: #6a1b9a;
       --purple-dark: #571580;
     }
+    .logo {
+      height: 50px;
+    }
   </style>
 </head>
 <body class="bg-gray-50 font-[system-ui] text-gray-800">
@@ -17,10 +20,9 @@
   <!-- Header -->
   <header class="shadow bg-white sticky top-0 z-10">
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold">
-        <span class="text-gray-900">Resume</span>
-        <span class="text-[var(--purple)]">Analyzer</span>
-      </h1>
+      <a href="/home">
+        <img class="logo" src="{{ url_for('static', filename='logo.png') }}" alt="Logo" >
+      </a>
       <a href="/" class="text-sm font-semibold text-[var(--purple)] hover:underline">Upload New Resume</a>
     </div>
   </header>

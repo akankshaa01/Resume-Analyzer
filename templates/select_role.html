@@ -41,19 +41,21 @@
  
   .title{
     margin-top:0;
-    font-size:1.75rem;
+    font-size:1.2rem;
     color:black;
+    margin-bottom: 10px;
   }
-  
-  .prediction{
-    font-size:1.1rem;
-    margin:1rem 0 2rem;
-  }
-  
-  .prediction span{
-    font-weight:600;
-    color:var(--purple);
-  }
+ 
+
+    .predicted-role {
+      font-size: 1.95rem; /* Slightly larger font size for the prediction */
+      font-weight: 700; /* Bold for the predicted role */
+      color: var(--purple-dark); /* Darker color to make it stand out more */
+      text-decoration: underline; 
+      margin: 0 1rem 2rem 2rem;
+    }
+
+
   
 
   .label{
@@ -107,7 +109,8 @@
     <h1 class="title">Predicted Job Role</h1>
 
     {% if prediction %}
-      <p class="prediction">You look like a <span>{{ prediction }}</span>!</p>
+      
+      <div class="predicted-role">{{ prediction }}</div>
     {% endif %}
 
     <label for="role" class="label">Select or confirm job role</label>
