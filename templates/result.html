@@ -1,0 +1,26 @@
+<!-- templates/result.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Analysis Result</title>
+</head>
+<body>
+    <h3>Resume Score: {{ score }}/100</h3>
+
+    <h3>Suggestions:</h3>
+
+
+<h3>Keyword Match for: {{ selected_role }}</h3>
+<p><strong>Match Percentage:</strong> {{ match_score }}%</p>
+
+<p><strong>Matched Keywords:</strong> {{ matched_keywords | join(', ') }}</p>
+<p><strong>Missing Keywords:</strong> {{ unmatched_keywords | join(', ') }}</p>
+
+<ul>
+  {% for tip in suggestions %}
+  <li>{{ tip|safe }}</li>
+{% endfor %}
+  </ul>
+  <a href="/">Upload another resume</a>
+</body>
+</html>

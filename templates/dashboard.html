@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume Analysis – Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{--purple:#6a1b9a;--purple-dark:#571580;}
+    .gauge{width:150px;height:150px;position:relative;}
+    .gauge svg{transform:rotate(-90deg);}/* start at 12 o’clock */
+    .gauge circle{fill:none;stroke-linecap:round;}
+    .gauge .bg{stroke:#eee;stroke-width:12;}
+    .gauge .meter{stroke:var(--purple);stroke-width:12;transition:stroke-dashoffset .6s;}
+    .gauge .label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 1.25rem/1 system-ui,sans-serif;color:var(--purple-dark);}  
+  </style>
+</head>
+<body class="bg-gray-50 font-[system-ui] text-gray-800">
+
+<header class="shadow bg-white sticky top-0 z-10">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <h1 class="text-2xl font-bold"><span class="text-gray-900">Resume</span> <span class="text-[var(--purple)]">Analyzer</span></h1>
+    <a href="/" class="text-sm font-semibold text-[var(--purple)]">Upload Another</a>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto flex gap-6 p-6">
+  <!-- Sidebar -->
+  <aside class="w-72 shrink-0 space-y-6 sticky top-24 self-start">
+    <!-- Overall score -->
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <h2 class="text-lg font-semibold mb-4">Overall Resume Score</h2>
+      <div class="flex justify-center">
+        {%- set circ = 263.9 -%}
+        <div class="gauge" data-score="{{ score }}">
+          <svg viewBox="0 0 100 100">
+            <circle class="bg"    cx="50" cy="50" r="42"/>
+            <circle class="meter" cx="50" cy="50" r="42"
+                    stroke-dasharray="{{ circ }}" stroke-dashoffset="{{ circ }}"/>
+          </svg>
+          <div class="label">{{ score }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checks (dummy booleans: update in backend) -->
+    <div class="bg-white p-6 rounded-2xl shadow space-y-4">
+      <h2 class="text-lg font-semibold mb-4">Detailed Checks</h2>
+      <ul class="space-y-3 text-sm">
+        <li class="flex justify-between">
+          <span>Content Check</span>
+          <span class="font-semibold {% if checks['content_check'] == '✔ Passed' %}text-green-600{% else %}text-red-600{% endif %}">
+            {{ checks['content_check'] }}
+          </span>
+        </li>
+        <li class="flex justify-between">
+          <span>Skills Check</span>
+          <span class="font-semibold {% if checks['skills_check'] == '✔ Passed' %}text-green-600{% else %}text-red-600{% endif %}">
+            {{ checks['skills_check'] }}
+          </span>
+        </li>
+        <li class="flex justify-between">
+          <span>Sections Check</span>
+          <span class="font-semibold {% if checks['sections_check'] == '✔ Passed' %}text-green-600{% else %}text-red-600{% endif %}">
+            {{ checks['sections_check'] }}
+          </span>
+        </li>
+        <li class="flex justify-between">
+          <span>Format Check</span>
+          <span class="font-semibold {% if checks['format_check'] == '✔ Passed' %}text-green-600{% else %}text-red-600{% endif %}">
+            {{ checks['format_check'] }}
+          </span>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 bg-purple-50/40 p-6 rounded-2xl space-y-6">
+    <!-- Snapshot -->
+    <div class="bg-white p-6 rounded-2xl shadow space-y-4">
+      <h2 class="text-xl font-semibold mb-4">Candidate Snapshot</h2>
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div class="font-medium text-gray-500">Name</div><div>{{ name }}</div>
+        <div class="font-medium text-gray-500">Email</div><div>{{ email }}</div>
+        <div class="font-medium text-gray-500">Target Role</div><div>{{ selected_role }}</div>
+      </div>
+      <hr>
+      <h3 class="font-semibold">Keyword Match</h3>
+      <div class="flex items-center gap-2">
+        <div class="w-full bg-gray-200 rounded-full h-4"><div class="bg-[var(--purple)] h-4 rounded-full" style="width: {{ match_score }}%;"></div></div>
+        <span class="font-semibold">{{ match_score }}%</span>
+      </div>
+    </div>
+
+    <!-- Matched keywords -->
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <h3 class="font-semibold mb-3 text-green-700">Matched Keywords</h3>
+      <div class="flex flex-wrap gap-2 text-sm">
+        {% for kw in matched_keywords %}
+          <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full">{{ kw }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Missing keywords -->
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <h3 class="font-semibold mb-3 text-red-600">Missing Keywords</h3>
+      <div class="flex flex-wrap gap-2 text-sm">
+        {% for kw in unmatched_keywords %}
+          <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full">{{ kw }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="bg-white p-6 rounded-2xl shadow space-y-4">
+      <h2 class="text-xl font-semibold text-[var(--purple-dark)] flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--purple)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3-3v6m9 4H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"/>
+        </svg>
+        Suggestions to Improve
+      </h2>
+      <ul class="space-y-3">
+        {% for tip in suggestions %}
+          <li class="flex items-start gap-3 bg-purple-50/30 p-3 rounded-xl border border-purple-100 shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mt-1 text-[var(--purple)] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span class="text-m text-gray-800">{{ tip|safe }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.gauge').forEach(g=>{
+    const s=parseFloat(g.dataset.score)||0,
+          c=g.querySelector('.meter'),
+          d=parseFloat(c.getAttribute('stroke-dasharray'));
+    c.style.strokeDashoffset=d*(1-s/100);
+  });
+</script>
+</body>
+</html>

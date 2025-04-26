@@ -1,0 +1,124 @@
+
+<html>
+
+<head>
+  <style>
+
+ 
+  :root{
+    --purple:#6a1b9a;
+    --purple-dark:#571580;
+    --purple-light:#f5eff9;
+    --text:#222;
+    --bg:#fafafa;
+    --radius:1rem;
+    --shadow:0 6px 12px rgba(0,0,0,.08);
+    --transition:.25s ease;
+  }
+  
+  body{ background:var(--bg); font-family:system-ui,sans-serif; color:var(--text); }
+  
+
+  .analyze-wrapper{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:calc(100vh - 80px);   /* leave space for navbar */
+    padding:2rem;
+  }
+  
+  .analyze-card{
+    background:#fff;
+    padding:2.5rem 3rem;
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    width:100%;
+    max-width:480px;
+    text-align:center;
+    animation:fadeIn .5s;
+  }
+  
+ 
+  .title{
+    margin-top:0;
+    font-size:1.75rem;
+    color:black;
+  }
+  
+  .prediction{
+    font-size:1.1rem;
+    margin:1rem 0 2rem;
+  }
+  
+  .prediction span{
+    font-weight:600;
+    color:var(--purple);
+  }
+  
+
+  .label{
+    display:block;
+    margin-bottom:.5rem;
+    font-weight:600;
+  }
+  
+  .select{
+    width:100%;
+    padding:.6rem .8rem;
+    border:2px solid var(--purple);
+    border-radius:.5rem;
+    font-size:1rem;
+    background:#fff;
+    cursor:pointer;
+    margin-bottom:1.5rem;
+  }
+  
+  .select:focus{
+    outline:none;
+    box-shadow:0 0 0 3px var(--purple-light);
+  }
+  
+  .btn-primary{
+    display:inline-block;
+    background:var(--purple);
+    color:#fff;
+    border:none;
+    padding:.75rem 2rem;
+    font-size:1rem;
+    font-weight:600;
+    border-radius:2rem;
+    cursor:pointer;
+    transition:var(--transition);
+  }
+  
+  .btn-primary:hover,
+  .btn-primary:focus{
+    background:var(--purple-dark);
+  }
+  
+  
+</style>
+</head>
+  <body>
+<section class="analyze-wrapper">
+  <form method="POST" action="/analyze" class="analyze-card">
+    <input type="hidden" name="resume_text" value="{{ resume_text }}">
+
+    <h1 class="title">Predicted Job Role</h1>
+
+    {% if prediction %}
+      <p class="prediction">You look like a <span>{{ prediction }}</span>!</p>
+    {% endif %}
+
+    <label for="role" class="label">Select or confirm job role</label>
+    <select name="selected_role" id="role" class="select">
+      {% for role in roles %}
+        <option value="{{ role }}" {% if role == prediction %}selected{% endif %}>{{ role }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" class="btn-primary">Analyze Resume</button>
+  </form>
+</section>
+</body>
+</html>

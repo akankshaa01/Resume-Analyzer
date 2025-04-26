@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analyzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f3e6f7;
+            text-align: center;
+        }
+
+        .navbar {
+            background-color: white;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: black;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 550;
+            font-size: large;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            background-color: #6a1b9a;
+            color: white;
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-weight: 550;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+        .navbar a.login-btn{ color:white; }
+
+        .login-btn:hover {
+            background-color: darkviolet;
+        }
+
+        .logo h2 {
+            font-size: 2em;
+        }
+      
+      .main-content {
+      text-align: center;
+      margin: 60px auto;
+      max-width: 50%;
+    }
+
+    .main-content h1 {
+      font-size: 40px;
+    }
+
+    .upload-box {
+      background-color: white;
+      padding: 30px;
+      border: 2px dashed #aaa;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .upload-button {
+      display: block;
+      margin-top: 20px;
+      padding: 10px 25px;
+      background-color: #851dc5;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    
+    .steps-box {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-size: 14px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .score {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2e7d32;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <h2><span style="color: black;">Resume</span> <span style="color: purple;">Analyzer</span></h2>
+        </div>
+        <div>
+            <a href="/home">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="#">Testimonials</a>
+            {% if current_user.is_authenticated %}
+            <a class="login-btn" href="/history">History</a> |
+            <a class="login-btn" href="/logout">Logout</a>
+          {% else %}
+            <a class="login-btn" href="/login">Login</a> 
+            <a class="login-btn" href="/register">Sign up</a>
+          {% endif %}
+        </div>
+    </div>
+
+      <section class="main-section">
+    <div class="main-content">
+      <h1>Analyze Your Resume with a single click</h1>
+      <p>Upload your resume to get a job role prediction and score based on structure, skills, and experience</p>
+      <div class="upload-box">
+        <p>Drop your resume here or choose a file.<br>PDF & DOCX only. Max 2MB file size.</p>
+        
+        <form id="resumeForm" action="/predict" method="POST" enctype="multipart/form-data">
+
+          <input id="resumeInput" type="file"  name="resume"accept=".pdf,.doc,.docx"  style="display:none;" />
+ 
+          <!-- 2. Visible button -->
+          <label for="resumeInput" class="upload-button" >Upload Resume</label>
+              </div>
+            </div>
+    
+  </section>
+
+  <script>
+    document.getElementById('resumeInput').addEventListener('change', function () {
+  if (this.files.length) {
+    document.getElementById('resumeForm').submit();
+  }
+});
+  </script>
+</body>
+</html>

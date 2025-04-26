@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+     
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ddd;
+}
+
+.container {
+    display: flex;
+    width: 800px;
+    height: 400px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.welcome-section {
+    width: 50%;
+    background: linear-gradient(135deg, #7e3af2, #a855f7);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+   
+    box-shadow: 0 4px 20px rgba(126, 58, 242, 0.2);
+}
+
+.welcome-section h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+
+.login-section {
+    width: 50%;
+    background: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.login-section h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.options a {
+    text-decoration: none;
+    color: #6a11cb;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #7e3af2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #6b21a8;
+}
+
+p {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+p a {
+    color: #6a11cb;
+    text-decoration: none;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Welcome back!</h1>
+            <p>You can sign in to access with your existing account.</p>
+        </div>
+        <div class="login-section">
+            <h2>Login</h2>
+            
+            <form action="/login" method="POST">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <div class="options">
+                    <a href="#">Forgot password?</a>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <p>New here? <a href="/register">Create an Account</a></p>
+        </div>
+    </div>
+</body>
+</html>
+

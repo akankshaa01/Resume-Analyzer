@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Resume Analyzer – Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{--purple:#6a1b9a;--purple-dark:#571580;}
+  .gauge{width:150px;height:150px;position:relative;}
+  .gauge svg{transform:rotate(-90deg);} 
+  .gauge circle{fill:none;stroke-width:16;stroke-linecap:round;}
+  .gauge .bg{stroke:#eee;}
+  .gauge .meter{stroke:var(--purple);transition:stroke-dashoffset .6s ease;}
+  .gauge .label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 1.3rem/1 system-ui,sans-serif;color:var(--purple-dark);}  
+</style>
+</head>
+<body class="bg-gray-50 font-[system-ui] text-gray-800">
+
+<header class="shadow bg-white sticky top-0 z-10">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <h1 class="text-2xl font-bold"><span class="text-gray-900">Resume</span> <span class="text-[var(--purple)]">Analyzer</span></h1>
+    <a href="/logout" class="text-sm font-semibold text-[var(--purple)]">Logout</a>
+  </div>
+</header>
+
+<!-- layout: fixed sidebar + flexible content -->
+<div class="max-w-7xl mx-auto flex gap-6 p-6">
+  <!-- fixed sidebar -->
+  <aside class="w-72 shrink-0 space-y-6 sticky top-24 self-start">
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <h2 class="text-lg font-semibold mb-4">Overall Resume Score</h2>
+      <div class="flex justify-center">
+        <div class="gauge" data-score="78">
+          <svg viewBox="0 0 100 100">
+            <circle class="bg"    cx="50" cy="50" r="42" stroke-width="12"/>
+            <circle class="meter" cx="50" cy="50" r="42" stroke-width="12"
+                    stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+          </svg>
+          <div class="label">78%</div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow space-y-4">
+      <h2 class="text-lg font-semibold mb-4">Detailed Checks</h2>
+      <ul class="space-y-3 text-sm">
+        <li class="flex justify-between"><span>Content Check</span><span class="font-semibold text-green-600">✔ Passed</span></li>
+        <li class="flex justify-between"><span>Skills Check</span><span class="font-semibold text-yellow-600">⚠ Needs work</span></li>
+        <li class="flex justify-between"><span>Sections Check</span><span class="font-semibold text-green-600">✔ Passed</span></li>
+        <li class="flex justify-between"><span>Format Check</span><span class="font-semibold text-green-600">✔ Passed</span></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- main content wrapper -->
+  <main class="flex-1 bg-purple-50/40 p-6 rounded-2xl space-y-6">
+    <!-- candidate snapshot -->
+    <div class="bg-white p-6 rounded-2xl shadow space-y-4">
+      <h2 class="text-xl font-semibold mb-4">Candidate Snapshot</h2>
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div class="font-medium text-gray-500">Name</div><div>Jane Doe</div>
+        <div class="font-medium text-gray-500">Email</div><div>jane.doe@example.com</div>
+        <div class="font-medium text-gray-500">Target Role</div><div>Data Analyst</div>
+      </div>
+      <hr>
+      <h3 class="font-semibold">Keyword Match</h3>
+      <div class="flex items-center gap-2">
+        <div class="w-full bg-gray-200 rounded-full h-4"><div class="bg-[var(--purple)] h-4 rounded-full" style="width:65%"></div></div>
+        <span class="font-semibold">65%</span>
+      </div>
+    </div>
+
+    <!-- matched keywords -->
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <h3 class="font-semibold mb-3 text-green-700">Matched Keywords</h3>
+      <div class="flex flex-wrap gap-2 text-sm">
+        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full">SQL</span>
+        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full">Python</span>
+        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full">Data Visualization</span>
+      </div>
+    </div>
+
+    <!-- missing keywords -->
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <h3 class="font-semibold mb-3 text-red-600">Missing Keywords</h3>
+      <div class="flex flex-wrap gap-2 text-sm">
+        <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full">ETL</span>
+        <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full">Power BI</span>
+        <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full">Statistical Modeling</span>
+      </div>
+    </div>
+
+    <!-- suggestions -->
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <h2 class="text-xl font-semibold mb-4">Suggestions</h2>
+      <ul class="list-disc list-inside space-y-2 text-sm">
+        <li>Add projects that highlight ETL pipelines and data cleaning.</li>
+        <li>Include Power BI dashboards you have built to improve keyword match.</li>
+        <li>Consider adding a brief professional summary at the top.</li>
+      </ul>
+    </div>
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.gauge').forEach(g=>{
+    const s=+g.dataset.score||0,c=g.querySelector('.meter'),d=+c.getAttribute('stroke-dasharray');
+    c.style.strokeDashoffset=d*(1-s/100);
+  });
+</script>
+</body>
+</html>
