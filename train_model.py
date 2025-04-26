@@ -7,8 +7,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 # --- Load dataset ---
-df1 = pd.read_csv("resume_dataset.csv")
-df2 = pd.read_csv("resume_dataset_2.csv")
+df1 = pd.read_csv("data/resume_dataset.csv")
+df2 = pd.read_csv("data/resume_dataset_2.csv")
 
 df = pd.concat([df1, df2], ignore_index=True)
 
