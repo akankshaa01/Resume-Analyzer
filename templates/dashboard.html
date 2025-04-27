@@ -83,7 +83,7 @@
       <div class="grid grid-cols-2 gap-4 text-sm">
         <div class="font-medium text-gray-500">Name</div><div>{{ name }}</div>
         <div class="font-medium text-gray-500">Email</div><div>{{ email }}</div>
-        <div class="font-medium text-gray-500">Target Role</div><div>{{ selected_role }}</div>
+        <div class="font-medium text-gray-500">Target Role</div><div>{{ role }}</div>
       </div>
       <hr>
       <h3 class="font-semibold">Keyword Match</h3>
@@ -95,7 +95,7 @@
 
     <!-- Matched keywords -->
     <div class="bg-white p-6 rounded-2xl shadow">
-      <h3 class="font-semibold mb-3 text-green-700">Matched Keywords</h3>
+      <h3 class="font-semibold mb-3 text-green-700">Matched Skills</h3>
       <div class="flex flex-wrap gap-2 text-sm">
         {% for kw in matched_keywords %}
           <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full">{{ kw }}</span>
@@ -105,7 +105,7 @@
 
     <!-- Missing keywords -->
     <div class="bg-white p-6 rounded-2xl shadow">
-      <h3 class="font-semibold mb-3 text-red-600">Missing Keywords</h3>
+      <h3 class="font-semibold mb-3 text-red-600">Missing Skills</h3>
       <div class="flex flex-wrap gap-2 text-sm">
         {% for kw in unmatched_keywords %}
           <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full">{{ kw }}</span>

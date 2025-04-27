@@ -148,6 +148,29 @@ def predict():
                            prediction=predicted_role, 
                            roles=all_roles)
 
+def split_sections(text):
+    # This function should return a dictionary of sections: summary, education, experience, skills, etc.
+    sections = {}
+    
+    # Lowercase the text for uniformity
+    text = text.lower()
+
+    # Split into potential sections (assumes each section is separated by a newline and a header)
+    sections_raw = text.split("\n\n")  # Double newline indicates section separation
+
+    for section in sections_raw:
+        # Check if the section starts with a common keyword (e.g., education)
+        if "education" in section:
+            sections["education"] = section.strip()
+        elif "experience" in section:
+            sections["experience"] = section.strip()
+        elif "skills" in section:
+            sections["skills"] = section.strip()
+        elif "summary" in section or "objective" in section:
+            sections["summary"] = section.strip()
+        # Add more conditions as needed for other sections
+    return sections
+
 
 def suggest_improvements(text: str, role=None, jd_keywords=None):
     text_low = text.lower()
@@ -158,17 +181,26 @@ def suggest_improvements(text: str, role=None, jd_keywords=None):
     if "summary" not in sections:
         sugg.append("Add a Summary / Objective section that highlights your target role and key strengths.")
     elif role and role.lower() not in sections["summary"].lower():
-        sugg.append("Mention your target role (e.g., **{}**) explicitly in the summary.".format(role))
+        sugg.append("Mention your target role (e.g., {}) explicitly in the summary.".format(role))
 
+    
     # ── EDUCATION ──────────────────────────────────────
-    edu = sections.get("education", "")
+    edu = sections.get("education", "").strip()  # Strip any leading/trailing spaces
+    
     if edu:
-        if not re.search(MONTH_PAT, edu, re.I):
+        # Check if the education section contains a year (4 digits)
+        if not re.search(r'\d{4}', edu):
             sugg.append("Include start month & year for each education entry.")
+        elif re.search(r'\d{4}', edu) and not re.search(MONTH_PAT, edu, re.I):  # Month missing
+            sugg.append("Consider adding start month & year for each education entry.")
+        
+        # If education section is a single line, suggest breaking it up for readability
         if edu.lower().count("\n") == 0:
             sugg.append("Break education details into multiple lines for readability.")
     else:
-        sugg.append("Add an Education section with degree, institute and dates.")
+        sugg.append("Ensure that your Education section includes clear details about your degree, institution and dates.")
+
+
 
     # ── EXPERIENCE ─────────────────────────────────────
     exp = sections.get("experience", "")
@@ -181,13 +213,13 @@ def suggest_improvements(text: str, role=None, jd_keywords=None):
     skills = sections.get("skills", "").lower()
     base_skills = ["python", "java", "html", "css", "git"]
     if not any(s in skills for s in base_skills):
-        sugg.append("Add a dedicated Skills section listing tools & languages (e.g., Python, Git).")
+        sugg.append("Add a dedicated Skills section listing tools & languages according to your job role.")
 
     # role/JD‑specific gaps
     if jd_keywords:
         missing = [kw for kw in jd_keywords if kw not in text_low]
         if missing:
-            sugg.append("Consider adding these JD keywords: **{}**".format(", ".join(missing[:10])))
+            sugg.append("Consider adding these JD keywords: {}".format(", ".join(missing[:10])))
     elif role:
         role_kw = job_keywords.get(role.lower(), [])
         missing = [kw for kw in role_kw if kw not in skills]
@@ -319,9 +351,6 @@ def analyze():
                            email=email,
                            checks=checks
                            )
-
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
